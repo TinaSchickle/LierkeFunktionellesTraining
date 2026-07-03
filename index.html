@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0f766e" />
+<title>Funktionelles Training · Übungen zum Nachschlagen</title>
+<meta name="description" content="Funktionelles Training in der Praxis – isometrische Grundlagen-Übungen nach Michael Lierke, modern zum Nachschlagen und Nachmachen." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏋️</text></svg>" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Funktionelles Training in der Praxis</p>
+    <h1>Übungen zum <span>Nachschlagen</span></h1>
+    <p class="lead">Isometrisches Grundlagen-Training – einfach, effektiv und mit einfachsten Mitteln.
+      Nach dem Workshop von <strong>Michael Lierke</strong> (AG Sportphysiotherapie).</p>
+    <div class="hero-meta">
+      <span class="pill">🧭 6 Übungen</span>
+      <span class="pill">⏱️ ca. 10 Sek. Haltezeit</span>
+      <span class="pill">🏠 überall machbar</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- INTRO -->
+  <section class="intro" aria-labelledby="intro-title">
+    <h2 id="intro-title" class="section-title"><span class="kicker">Bevor du startest</span>Das Wichtigste vorab</h2>
+
+    <div class="intro-grid">
+      <article class="info-card rules">
+        <h3>📏 Die Grundregeln</h3>
+        <ul class="rules-list">
+          <li><b>10 Sekunden</b> halten – so lange dauert eine Kontraktion.</li>
+          <li>Immer mit <b>maximaler Kraft</b> arbeiten.</li>
+          <li><b>Ruhig weiteratmen</b> – die Luft nicht anhalten.</li>
+          <li>Danach <b>Pause</b> von mindestens gleicher Länge.</li>
+          <li><b>3 bis 5 Wiederholungen</b> pro Übung.</li>
+          <li>Am besten <b>täglich</b> trainieren.</li>
+          <li>Bei <b>Schmerzen</b> sofort abbrechen.</li>
+        </ul>
+      </article>
+
+      <div class="info-side">
+        <article class="info-card tip">
+          <h3>⚖️ Kleiner Motivations-Trick</h3>
+          <p>Mit einer einfachen <b>analogen Personenwaage</b> lässt sich bei einigen Übungen
+             die aufgewandte Kraft messen. So werden Fortschritte sichtbar – das motiviert enorm!</p>
+        </article>
+        <article class="info-card gear">
+          <h3>🧰 Was du brauchst</h3>
+          <p>Meist reicht ein <b>Türrahmen</b> als Widerstand. Für ein paar Übungen helfen
+             ein <b>festes Polster</b> oder ein <b>griffiger Ball</b> (⌀ 10–12 cm).</p>
+        </article>
+      </div>
+    </div>
+
+    <p class="intro-note">💡 Die Übungen zeigen: Auch <b>isometrisches</b> Rumpftraining funktioniert
+      im Zusammenspiel ganzer Muskelketten und in <b>aufrechter Körperhaltung</b> – nicht nur im Liegen.</p>
+  </section>
+
+  <!-- FILTER -->
+  <section class="controls" aria-label="Übungen filtern">
+    <div class="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 21l-4.3-4.3M11 18a7 7 0 100-14 7 7 0 000 14z"/></svg>
+      <input id="search" type="search" placeholder="Übung oder Muskel suchen …" autocomplete="off" />
+    </div>
+    <div class="chips" id="chips" role="tablist" aria-label="Nach Körperregion filtern"></div>
+  </section>
+
+  <!-- EXERCISES -->
+  <section class="grid" id="grid" aria-live="polite"></section>
+  <p class="empty" id="empty" hidden>Keine Übung gefunden. Versuch einen anderen Suchbegriff.</p>
+
+</main>
+
+<!-- DETAIL MODAL -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="m-title">
+    <button class="modal-close" data-close aria-label="Schließen">✕</button>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<footer class="foot">
+  <p>Inhalte nach der Präsentation „Funktionelles Training in der Praxis“ von <b>Michael Lierke</b>,
+     AG Sportphysiotherapie (Bundeskongress Physiotherapie, 2014).</p>
+  <p class="disclaimer">Kein Ersatz für individuelle physiotherapeutische Beratung. Bei Beschwerden bitte Fachpersonal fragen.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+# OS / editor cruft
+Thumbs.db
+.DS_Store
+desktop.ini
+*.log
+
+# node (nur falls lokal ein Tool genutzt wird)
+node_modules/
