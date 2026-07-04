@@ -25,8 +25,32 @@ const EXERCISES = [
     id: 2,
     name: "Diagonaler Frontaldruck",
     aka: "Übung 2",
-    img: "images/u1.jpg",
-    photoNote: "Das Originalfoto dieser Übung fehlt in der Vorlage. Abgebildet ist die verwandte Grundposition (Übung 1) – der Druck erfolgt hier jedoch diagonal.",
+    illu: `<svg viewBox="0 0 360 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration: diagonaler Frontaldruck">
+      <defs>
+        <linearGradient id="u2body" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#f6f7f1"/><stop offset="1" stop-color="#c9cfc0"/>
+        </linearGradient>
+        <linearGradient id="u2arm" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#ff9166"/><stop offset="1" stop-color="#ee5c2c"/>
+        </linearGradient>
+        <marker id="u2arr" markerUnits="userSpaceOnUse" markerWidth="26" markerHeight="26" refX="9" refY="13" orient="auto">
+          <path d="M2,2 L24,13 L2,24 L9,13 Z" fill="#ee5c2c"/>
+        </marker>
+      </defs>
+      <ellipse cx="176" cy="430" rx="116" ry="13" fill="#ffffff" opacity="0.07"/>
+      <g fill="none" stroke="url(#u2body)" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M150,292 L116,344 L84,404" stroke-width="26"/>
+        <path d="M150,292 L178,350 L206,408" stroke-width="26"/>
+        <path d="M150,298 L228,204" stroke-width="42"/>
+        <path d="M212,214 L258,232 L296,256" stroke-width="22"/>
+      </g>
+      <circle cx="252" cy="170" r="27" fill="url(#u2body)"/>
+      <path d="M228,206 L274,226 L308,252" fill="none" stroke="url(#u2arm)" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="299" cy="254" r="15" fill="#c9cfc0"/>
+      <circle cx="309" cy="251" r="12" fill="url(#u2arm)"/>
+      <path d="M314,268 L345,321" fill="none" stroke="#ee5c2c" stroke-width="11" stroke-linecap="round" marker-end="url(#u2arr)"/>
+    </svg>`,
+    photoNote: "Für diese Übung gibt es in der Vorlage kein Foto – deshalb zeigt diese Illustration die Bewegung: Ein Arm drückt diagonal nach vorne, die andere Hand fasst das Handgelenk und zieht mit.",
     regions: ["Brust", "Rumpf"],
     muscles: ["Pectoralis major", "Diagonale Bauchmuskulatur", "Latissimus dorsi"],
     steps: [
@@ -145,7 +169,7 @@ function render() {
     card.style.animationDelay = `${i * 60}ms`;
     card.setAttribute("aria-label", `${ex.name} – Details ansehen`);
     card.innerHTML = `
-      <div class="card-illu"><span class="card-num">${ex.id}</span><img src="${ex.img}" alt="${ex.name}" loading="lazy" /></div>
+      <div class="card-illu"><span class="card-num">${ex.id}</span>${ex.illu ? ex.illu : `<img src="${ex.img}" alt="${ex.name}" loading="lazy" />`}</div>
       <div class="card-body">
         <p class="card-sub">${ex.aka}</p>
         <h3>${ex.name}</h3>
@@ -164,7 +188,7 @@ const modalBody = document.getElementById("modal-body");
 
 function openModal(ex) {
   modalBody.innerHTML = `
-    <div class="m-illu"><span class="m-num">${ex.id}</span><img src="${ex.img}" alt="${ex.name} – Ausführung" /></div>
+    <div class="m-illu"><span class="m-num">${ex.id}</span>${ex.illu ? ex.illu : `<img src="${ex.img}" alt="${ex.name} – Ausführung" />`}</div>
     <div class="m-content">
       <p class="m-sub">${ex.aka}</p>
       <h2>${ex.name}</h2>
