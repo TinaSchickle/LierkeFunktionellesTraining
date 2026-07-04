@@ -1,122 +1,16 @@
 /* Funktionelles Training – Übungen zum Nachschlagen
    Inhalte nach der Präsentation von Michael Lierke (AG Sportphysiotherapie). */
 
-/* ---------- SVG-Illustrationen ---------- */
-/* Einheitlicher, freundlicher Stil. Dunkle Figur = Körper, Koralle = Kraftrichtung. */
-
-const F = "#0b4f4a";      // Figur
-const A = "#f2683c";      // Aktion / Kraftrichtung
-const W = "#f6b73c";      // Hilfsmittel / Wand
-
-function frame(id, body) {
-  return `<svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg" role="img">
-    <defs>
-      <linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#e8f7f2"/><stop offset="1" stop-color="#d3ede6"/>
-      </linearGradient>
-      <marker id="ar-${id}" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="11" refY="8" orient="auto">
-        <path d="M1,1 L15,8 L1,15 Z" fill="${A}"/>
-      </marker>
-    </defs>
-    <rect width="320" height="220" fill="url(#${id})"/>
-    <line x1="34" y1="197" x2="286" y2="197" stroke="#b6d9cf" stroke-width="3" stroke-linecap="round"/>
-    ${body}
-  </svg>`;
-}
-
-// gemeinsame Figur-Stilangaben
-const limb = `stroke="${F}" stroke-width="13" stroke-linecap="round" fill="none"`;
-const limbA = `stroke="${A}" stroke-width="13" stroke-linecap="round" fill="none"`;
-const arrow = (d) => `<path d="${d}" fill="none" stroke="${A}" stroke-width="5" stroke-linecap="round" marker-end="url(#ar-@)"/>`;
-
-const ILLU = {
-  // 1 – Vertikaler Frontaldruck: aufrecht, beide Hände drücken waagerecht gegen die Wand
-  vertikal: frame("g1", `
-    <rect x="238" y="24" width="16" height="173" rx="4" fill="${W}"/>
-    <rect x="212" y="120" width="34" height="26" rx="4" fill="#fff" stroke="${F}" stroke-width="3"/>
-    <circle cx="120" cy="52" r="17" fill="${F}"/>
-    <path d="M120,70 L120,128" ${limb}/>
-    <path d="M120,128 L104,162 L100,194" ${limb}/>
-    <path d="M120,128 L138,160 L144,194" ${limb}/>
-    <path d="M120,86 L172,90 L214,92" ${limbA}/>
-    <path d="M222,88 L238,88" fill="none" stroke="${A}" stroke-width="5" stroke-linecap="round" marker-end="url(#ar-g1)"/>
-    <path d="M222,104 L238,104" fill="none" stroke="${A}" stroke-width="5" stroke-linecap="round" marker-end="url(#ar-g1)"/>
-  `),
-
-  // 2 – Diagonaler Frontaldruck: ein Arm drückt diagonal zur Gegenhüfte, andere Hand am Handgelenk
-  diagonal: frame("g2", `
-    <circle cx="150" cy="50" r="17" fill="${F}"/>
-    <path d="M150,68 L150,126" ${limb}/>
-    <path d="M150,126 L132,160 L128,194" ${limb}/>
-    <path d="M150,126 L168,160 L172,194" ${limb}/>
-    <path d="M150,84 L120,120 L108,150" ${limbA}/>
-    <path d="M150,86 L128,128" ${limb}/>
-    <circle cx="119" cy="127" r="9" fill="${F}"/>
-    <path d="M96,138 L78,166" fill="none" stroke="${A}" stroke-width="6" stroke-linecap="round" marker-end="url(#ar-g2)"/>
-  `),
-
-  // 3 – Gebets-Übung: Hände vor der Brust gegeneinander, mit Rotation
-  gebet: frame("g3", `
-    <circle cx="160" cy="48" r="17" fill="${F}"/>
-    <path d="M160,66 L160,128" ${limb}/>
-    <path d="M160,128 L143,162 L139,194" ${limb}/>
-    <path d="M160,128 L177,162 L181,194" ${limb}/>
-    <path d="M160,86 L130,104 L150,110" ${limbA}/>
-    <path d="M160,86 L190,104 L170,110" ${limbA}/>
-    <path d="M118,104 L142,104" fill="none" stroke="${A}" stroke-width="5" stroke-linecap="round" marker-end="url(#ar-g3)"/>
-    <path d="M202,104 L178,104" fill="none" stroke="${A}" stroke-width="5" stroke-linecap="round" marker-end="url(#ar-g3)"/>
-    <path d="M150,150 A30,30 0 0 1 200,150" fill="none" stroke="${A}" stroke-width="4" stroke-linecap="round" marker-end="url(#ar-g3)"/>
-  `),
-
-  // 4 – Der Sprinter: Schrittstellung wie beim Sprintstart, Arme in Laufhaltung
-  sprinter: frame("g4", `
-    <circle cx="120" cy="62" r="17" fill="${F}"/>
-    <path d="M120,80 L150,116" ${limb}/>
-    <path d="M150,116 L120,150 L98,180" ${limb}/>
-    <path d="M150,116 L196,150 L214,192" ${limb}/>
-    <path d="M138,96 L108,120 L96,150" ${limbA}/>
-    <path d="M138,96 L176,80 L196,66" ${limbA}/>
-    <path d="M214,110 L244,140" fill="none" stroke="${A}" stroke-width="5" stroke-linecap="round" marker-end="url(#ar-g4)"/>
-    <path d="M96,150 L70,176" fill="none" stroke="${A}" stroke-width="5" stroke-linecap="round" marker-end="url(#ar-g4)"/>
-  `),
-
-  // 5 – Der Speerwerfer: Wurfstellung, ein Arm nach hinten oben
-  speer: frame("g5", `
-    <circle cx="150" cy="58" r="17" fill="${F}"/>
-    <path d="M150,76 L150,128" ${limb}/>
-    <path d="M150,128 L118,152 L100,188" ${limb}/>
-    <path d="M150,128 L184,150 L206,186" ${limb}/>
-    <path d="M150,90 L120,74 L96,58" ${limbA}/>
-    <path d="M150,90 L186,102 L214,110" ${limbA}/>
-    <line x1="82" y1="70" x2="128" y2="46" stroke="${F}" stroke-width="4" stroke-linecap="round"/>
-    <path d="M118,150 A56,56 0 0 1 214,120" fill="none" stroke="${A}" stroke-width="4" stroke-linecap="round" marker-end="url(#ar-g5)"/>
-  `),
-
-  // 6 – Die Schulter-Uhr: Hand drückt Ball gegen Türrahmen, Uhr-Motiv
-  schulteruhr: frame("g6", `
-    <rect x="244" y="24" width="16" height="173" rx="4" fill="${W}"/>
-    <circle cx="120" cy="54" r="17" fill="${F}"/>
-    <path d="M120,72 L120,128" ${limb}/>
-    <path d="M120,128 L104,162 L100,194" ${limb}/>
-    <path d="M120,128 L138,160 L144,194" ${limb}/>
-    <path d="M120,88 L176,92 L214,96" ${limbA}/>
-    <circle cx="226" cy="96" r="15" fill="#fff" stroke="${A}" stroke-width="4"/>
-    <g stroke="${A}" stroke-width="4" stroke-linecap="round" fill="none">
-      <path d="M226,60 L226,72" marker-end="url(#ar-g6)"/>
-      <path d="M258,96 L246,96" marker-end="url(#ar-g6)"/>
-      <path d="M226,132 L226,120" marker-end="url(#ar-g6)"/>
-    </g>
-  `),
-};
-
-/* ---------- Übungsdaten ---------- */
+/* ---------- Übungsdaten ----------
+   Fotos: Originalaufnahmen aus der Präsentation von Michael Lierke,
+   direkt aus dem PDF extrahiert (freigestellt vor schwarzem Hintergrund). */
 
 const EXERCISES = [
   {
     id: 1,
     name: "Vertikaler Frontaldruck",
     aka: "Übung 1",
-    illu: ILLU.vertikal,
+    img: "images/u1.jpg",
     regions: ["Brust", "Rumpf"],
     muscles: ["Pectoralis major et minor", "Rectus abdominis", "Latissimus dorsi", "Deltoideus (pars dorsalis)", "Triceps brachii"],
     steps: [
@@ -131,7 +25,8 @@ const EXERCISES = [
     id: 2,
     name: "Diagonaler Frontaldruck",
     aka: "Übung 2",
-    illu: ILLU.diagonal,
+    img: "images/u1.jpg",
+    photoNote: "Das Originalfoto dieser Übung fehlt in der Vorlage. Abgebildet ist die verwandte Grundposition (Übung 1) – der Druck erfolgt hier jedoch diagonal.",
     regions: ["Brust", "Rumpf"],
     muscles: ["Pectoralis major", "Diagonale Bauchmuskulatur", "Latissimus dorsi"],
     steps: [
@@ -145,7 +40,7 @@ const EXERCISES = [
     id: 3,
     name: "Gebets-Übung",
     aka: "Übung 3",
-    illu: ILLU.gebet,
+    img: "images/u3.jpg",
     regions: ["Rumpf"],
     muscles: ["Rotatores", "Multifidii", "Transverse Bauchmuskulatur", "Lumbale Rückenstrecker"],
     steps: [
@@ -160,7 +55,7 @@ const EXERCISES = [
     id: 4,
     name: "Der Sprinter",
     aka: "Übung 4",
-    illu: ILLU.sprinter,
+    img: "images/u4.jpg",
     regions: ["Rumpf", "Hüfte"],
     muscles: ["Lumbo-sacraler Übergang", "Gluteus maximus", "Ilio-psoas / Adduktoren", "Pelvi-trochantäre Muskulatur"],
     steps: [
@@ -176,7 +71,7 @@ const EXERCISES = [
     id: 5,
     name: "Der Speerwerfer",
     aka: "Übung 5",
-    illu: ILLU.speer,
+    img: "images/u5.jpg",
     regions: ["Schulter", "Rumpf"],
     muscles: ["Intrascapuläre Muskulatur", "Pectoralis major / minor", "Schultergürtelmuskulatur"],
     steps: [
@@ -191,7 +86,7 @@ const EXERCISES = [
     id: 6,
     name: "Die Schulter-Uhr",
     aka: "Übung 6",
-    illu: ILLU.schulteruhr,
+    img: "images/u6.jpg",
     regions: ["Schulter"],
     muscles: ["Schultergürtel", "Rotatorenmanschette (gelenksichernd)"],
     equipment: "Griffiger Gymnastikball, ⌀ 10–12 cm",
@@ -250,7 +145,7 @@ function render() {
     card.style.animationDelay = `${i * 60}ms`;
     card.setAttribute("aria-label", `${ex.name} – Details ansehen`);
     card.innerHTML = `
-      <div class="card-illu"><span class="card-num">${ex.id}</span>${ex.illu.replace(/@/g, "g" + ex.id)}</div>
+      <div class="card-illu"><span class="card-num">${ex.id}</span><img src="${ex.img}" alt="${ex.name}" loading="lazy" /></div>
       <div class="card-body">
         <p class="card-sub">${ex.aka}</p>
         <h3>${ex.name}</h3>
@@ -269,10 +164,11 @@ const modalBody = document.getElementById("modal-body");
 
 function openModal(ex) {
   modalBody.innerHTML = `
-    <div class="m-illu"><span class="m-num">${ex.id}</span>${ex.illu.replace(/@/g, "m" + ex.id)}</div>
+    <div class="m-illu"><span class="m-num">${ex.id}</span><img src="${ex.img}" alt="${ex.name} – Ausführung" /></div>
     <div class="m-content">
       <p class="m-sub">${ex.aka}</p>
       <h2>${ex.name}</h2>
+      ${ex.photoNote ? `<p class="m-photonote">📷 ${ex.photoNote}</p>` : ""}
 
       ${ex.equipment ? `<div class="m-block"><div class="m-goal"><span class="ic">🧰</span><div><b>Du brauchst:</b> ${ex.equipment}</div></div></div>` : ""}
 
