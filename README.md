@@ -8,7 +8,7 @@ Die App zeigt die **Grundregeln** sowie die **6 Übungen** (Teil 1 – Isometris
 
 ## Verwenden
 
-- **Online:** Über GitHub Pages (siehe unten).
+- **Online:** https://tinaschickle.github.io/LierkeFunktionellesTraining/
 - **Lokal:** Einfach die Datei `index.html` im Browser öffnen – es ist keine Installation nötig.
 
 ## Funktionen
@@ -18,13 +18,13 @@ Die App zeigt die **Grundregeln** sowie die **6 Übungen** (Teil 1 – Isometris
 - 🏷️ Filter nach Körperregion (Brust, Rumpf, Schulter, Hüfte)
 - 📱 Für Handy & Desktop optimiert – auch als App zum Homescreen hinzufügbar
 
-## GitHub Pages aktivieren
+## GitHub Pages
 
-1. In diesem Repository auf **Settings → Pages** gehen.
-2. Bei *Build and deployment* unter *Source* **„Deploy from a branch“** wählen.
-3. Branch **`main`** und Ordner **`/ (root)`** auswählen, dann **Save**.
-4. Nach ein bis zwei Minuten ist die App unter
-   `https://tinaschickle.github.io/LierkeFunktionellesTraining/` erreichbar.
+Die App ist bereits über GitHub Pages veröffentlicht und wird bei jedem Push auf `main`
+automatisch neu gebaut (Einstellung: *Settings → Pages → Deploy from a branch*, Branch
+`main`, Ordner `/ (root)`).
+
+Live: **https://tinaschickle.github.io/LierkeFunktionellesTraining/**
 
 ## Aufbau
 
