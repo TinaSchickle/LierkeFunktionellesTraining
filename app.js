@@ -187,70 +187,176 @@ function render() {
   });
 }
 
-/* ---------- Muskel-Landkarte ----------
-   Schematische, frei gezeichnete Figur (keine reale Person / kein Foto).
-   Die für eine Übung trainierten Muskelgruppen werden farbig hervorgehoben. */
+/* ---------- Muskel-Landkarte (anatomische Illustration) ----------
+   Frei gezeichnete Écorché-Figur im Stil einer anatomischen Muskeltafel
+   (keine reale Person, kein Foto). Alle Muskeln sind angelegt; die bei
+   der jeweiligen Übung trainierten bleiben kräftig und leuchten,
+   die übrigen treten gedämpft in den Hintergrund.
 
-/* Grund-Silhouette (lokale Koordinaten 0..180 breit, 0..470 hoch) –
-   für Vorder- und Rückansicht identisch verwendet. */
-function silhouette() {
-  return `
-    <g class="mm-body">
-      <circle cx="90" cy="42" r="24"/>
-      <rect x="79" y="60" width="22" height="18" rx="8"/>
-      <path d="M62,84 Q90,77 118,84 L124,142 Q126,182 114,214 L110,220 Q90,227 70,220 L66,214 Q54,182 56,142 Z"/>
-      <path class="mm-limb" d="M60,90 L45,150 L49,208"/>
-      <path class="mm-limb" d="M120,90 L135,150 L131,208"/>
-      <path d="M68,214 Q90,222 112,214 L118,252 Q90,264 62,252 Z"/>
-      <path class="mm-leg" d="M80,250 L74,342 L78,432"/>
-      <path class="mm-leg" d="M100,250 L106,342 L102,432"/>
+   Aufbau: Nur die linke Körperhälfte + Mittellinie werden gezeichnet und
+   per Transform gespiegelt. Jede Muskelgruppe trägt ein data-zone-Attribut;
+   die Hervorhebung wird über einen String-Replace als Klasse eingesetzt. */
+
+/* Fasertexturen und Sehnenlinien einer Muskelgruppe. */
+const AN_DEFS = `
+  <defs>
+    <radialGradient id="anRed" cx="34%" cy="26%" r="85%">
+      <stop offset="0" stop-color="#c85f47"/>
+      <stop offset="52%" stop-color="#a53a2d"/>
+      <stop offset="100%" stop-color="#761f1b"/>
+    </radialGradient>
+    <linearGradient id="anSkull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#efe2c6"/><stop offset="1" stop-color="#d8c39c"/>
+    </linearGradient>
+  </defs>`;
+
+/* Vorderansicht – linke Körperhälfte (x ≤ 100); wird gespiegelt. */
+const AN_FRONT_SIDE = `
+    <g data-zone="neck"><path d="M93,71 C90,82 92,95 99,106 L99,97 C95,87 95,79 96,71 Z"/></g>
+    <g data-zone="delt_f">
+      <path d="M80,100 C65,96 51,105 46,123 C43,138 50,151 62,152 C74,153 82,142 83,125 C84,112 84,104 80,100 Z"/>
+      <path class="an-fib" d="M60,150 C58,133 62,117 74,106"/>
+      <path class="an-fib" d="M66,151 C64,135 67,120 79,110"/>
+    </g>
+    <g data-zone="pec">
+      <path d="M99,108 L99,151 C87,153 75,150 69,141 C63,132 65,119 74,113 C82,108 92,107 99,108 Z"/>
+      <path class="an-fib" d="M98,113 C85,116 77,124 71,138"/>
+      <path class="an-fib" d="M98,125 C87,127 79,132 72,140"/>
+      <path class="an-fib" d="M98,139 C89,141 83,143 74,146"/>
+    </g>
+    <g data-zone="serr">
+      <path d="M70,150 L80,147 L82,156 L71,159 Z"/>
+      <path d="M69,161 L79,159 L80,168 L70,171 Z"/>
+      <path d="M68,173 L77,172 L77,180 L68,182 Z"/>
+    </g>
+    <g data-zone="oblique">
+      <path d="M84,150 L84,236 C77,238 70,234 68,225 L66,177 C66,161 74,152 84,150 Z"/>
+      <path class="an-fib" d="M82,158 C74,170 70,192 70,220"/>
+      <path class="an-fib" d="M83,171 C77,183 74,201 74,224"/>
+    </g>
+    <g data-zone="biceps">
+      <path d="M60,150 C50,154 44,167 45,183 C46,193 54,196 60,190 C65,181 66,161 63,151 Z"/>
+      <path class="an-fib" d="M55,157 C50,170 50,183 55,190"/>
+    </g>
+    <g data-zone="forearm">
+      <path d="M58,191 C50,197 44,215 46,233 C47,241 54,242 58,236 C63,224 64,205 61,193 Z"/>
+      <path class="an-fib" d="M54,199 C50,215 51,229 56,236"/>
+    </g>
+    <g data-zone="hand"><path class="an-ten" d="M46,237 C42,243 44,253 50,255 C56,256 58,249 57,241 Z"/></g>
+    <g data-zone="hipflex">
+      <path d="M99,250 L99,320 C93,322 88,316 86,306 L86,268 C88,256 94,250 99,250 Z"/>
+      <path class="an-fib" d="M97,258 C92,278 90,298 90,314"/>
+    </g>
+    <g data-zone="quad">
+      <path d="M96,250 C102,272 100,318 90,350 C86,351 80,349 78,344 C74,315 76,281 82,260 C85,251 91,249 96,250 Z"/>
+      <path class="an-fib" d="M92,259 C86,287 84,320 84,346"/>
+      <path class="an-fib" d="M86,263 C82,291 82,320 82,344"/>
+      <path class="an-ten" d="M97,253 C90,282 82,320 79,347 L82,348 C87,320 94,283 100,255 Z"/>
+    </g>
+    <g data-zone="leg">
+      <path d="M86,352 C92,371 92,401 88,430 C86,436 80,436 78,430 C76,402 78,372 82,355 Z"/>
+      <path class="an-fib" d="M85,361 C82,389 82,413 84,428"/>
     </g>`;
+
+/* Vorderansicht – Mittellinie / einzelne mediane Strukturen. */
+const AN_FRONT_CENTER = `
+    <ellipse class="an-skull" cx="100" cy="42" rx="23" ry="29"/>
+    <path class="an-tenl" d="M100,101 L74,105"/>
+    <path class="an-tenl" d="M100,101 L126,105"/>
+    <g data-zone="abs">
+      <path d="M100,131 C110,131 116,140 116,151 L116,231 C116,241 108,245 100,245 C92,245 84,241 84,231 L84,151 C84,140 90,131 100,131 Z"/>
+      <path class="an-tenl" d="M100,133 L100,243"/>
+      <path class="an-tenl" d="M85,161 L115,161"/>
+      <path class="an-tenl" d="M85,183 L115,183"/>
+      <path class="an-tenl" d="M86,205 L114,205"/>
+    </g>`;
+
+/* Rückansicht – linke Körperhälfte (x ≤ 100); wird gespiegelt. */
+const AN_BACK_SIDE = `
+    <g data-zone="delt_b">
+      <path d="M78,102 C64,98 50,107 46,125 C43,140 50,152 62,152 C73,152 82,142 82,125 C82,112 82,105 78,102 Z"/>
+      <path class="an-fib" d="M60,150 C58,134 62,118 74,108"/>
+    </g>
+    <g data-zone="scapula">
+      <path d="M84,122 C72,120 63,128 63,140 C63,151 73,156 84,152 C92,148 93,130 84,122 Z"/>
+      <path class="an-fib" d="M82,128 L68,140"/>
+      <path class="an-fib" d="M84,136 L69,147"/>
+    </g>
+    <g data-zone="triceps">
+      <path d="M60,142 C50,147 44,165 46,183 C47,192 55,195 61,189 C66,180 66,158 63,146 Z"/>
+      <path class="an-fib" d="M55,150 C51,166 52,180 57,188"/>
+    </g>
+    <g data-zone="forearm">
+      <path d="M58,191 C50,197 45,215 47,233 C48,241 55,242 59,236 C63,224 64,205 61,193 Z"/>
+    </g>
+    <g data-zone="lat">
+      <path d="M99,150 L99,215 C86,214 72,205 65,192 C58,179 60,163 71,156 C81,151 91,150 99,150 Z"/>
+      <path class="an-fib" d="M96,157 C82,163 72,177 66,191"/>
+      <path class="an-fib" d="M97,171 C86,175 78,183 70,193"/>
+      <path class="an-fib" d="M98,187 C90,191 84,195 75,199"/>
+    </g>
+    <g data-zone="glute">
+      <path d="M99,246 L99,304 C84,306 72,297 68,282 C64,267 71,252 84,247 C90,245 95,245 99,246 Z"/>
+      <path class="an-fib" d="M95,252 C82,258 74,270 71,284"/>
+      <path class="an-fib" d="M97,266 C88,270 80,278 74,288"/>
+    </g>
+    <g data-zone="leg">
+      <path d="M96,306 C101,325 99,338 91,354 C87,355 82,352 80,346 C77,328 80,315 86,306 Z"/>
+      <path d="M88,356 C94,374 94,402 89,430 C87,436 81,436 79,430 C77,402 80,374 84,358 Z"/>
+      <path class="an-fib" d="M87,364 C84,390 84,414 86,428"/>
+    </g>`;
+
+/* Rückansicht – Mittellinie / einzelne mediane Strukturen. */
+const AN_BACK_CENTER = `
+    <ellipse class="an-skull" cx="100" cy="42" rx="23" ry="29"/>
+    <g data-zone="traps">
+      <path d="M100,90 C118,95 132,108 141,121 C130,131 116,150 100,208 C84,150 70,131 59,121 C68,108 82,95 100,90 Z"/>
+      <path class="an-fib" d="M100,100 L136,122"/>
+      <path class="an-fib" d="M100,100 L64,122"/>
+      <path class="an-fib" d="M100,120 L120,182"/>
+      <path class="an-fib" d="M100,120 L80,182"/>
+    </g>
+    <path class="an-tenl" d="M100,92 L100,208"/>
+    <g data-zone="lumbar">
+      <path d="M99,206 L99,258 C95,260 90,258 88,252 L88,220 C90,210 95,206 99,206 Z"/>
+      <path d="M101,206 L101,258 C105,260 110,258 112,252 L112,220 C110,210 105,206 101,206 Z"/>
+      <path class="an-fib" d="M96,212 L94,254"/>
+      <path class="an-fib" d="M104,212 L106,254"/>
+    </g>`;
+
+/* Setzt eine Ansicht aus gespiegelter Seite + Mitte zusammen. */
+function anatomyView(side, center) {
+  return `
+    <g class="an-side">${side}</g>
+    <g class="an-side" transform="translate(200,0) scale(-1,1)">${side}</g>
+    <g class="an-center">${center}</g>`;
 }
 
 function muscleMap(highlight) {
   const on = new Set(highlight || []);
-  const c = (k) => (on.has(k) ? "mm-zone on" : "mm-zone");
+  const front = anatomyView(AN_FRONT_SIDE, AN_FRONT_CENTER);
+  const back = anatomyView(AN_BACK_SIDE, AN_BACK_CENTER);
 
-  // Vorderansicht-Zonen
-  const front = `
-    <ellipse class="${c("delt_f")}" cx="60"  cy="98"  rx="13" ry="11"/>
-    <ellipse class="${c("delt_f")}" cx="120" cy="98"  rx="13" ry="11"/>
-    <ellipse class="${c("pec")}"    cx="78"  cy="116" rx="13" ry="10"/>
-    <ellipse class="${c("pec")}"    cx="102" cy="116" rx="13" ry="10"/>
-    <rect    class="${c("abs")}"    x="80" y="128" width="20" height="56" rx="7"/>
-    <ellipse class="${c("oblique")}" cx="70"  cy="168" rx="8"  ry="20"/>
-    <ellipse class="${c("oblique")}" cx="110" cy="168" rx="8"  ry="20"/>
-    <ellipse class="${c("hipflex")}" cx="80"  cy="250" rx="10" ry="17"/>
-    <ellipse class="${c("hipflex")}" cx="100" cy="250" rx="10" ry="17"/>`;
-
-  // Rückansicht-Zonen
-  const back = `
-    <ellipse class="${c("delt_b")}" cx="60"  cy="98"  rx="13" ry="11"/>
-    <ellipse class="${c("delt_b")}" cx="120" cy="98"  rx="13" ry="11"/>
-    <path    class="${c("traps")}"  d="M72,90 Q90,84 108,90 L104,116 Q90,122 76,116 Z"/>
-    <ellipse class="${c("scapula")}" cx="78"  cy="128" rx="9"  ry="11"/>
-    <ellipse class="${c("scapula")}" cx="102" cy="128" rx="9"  ry="11"/>
-    <ellipse class="${c("triceps")}" cx="46"  cy="140" rx="8"  ry="16"/>
-    <ellipse class="${c("triceps")}" cx="134" cy="140" rx="8"  ry="16"/>
-    <ellipse class="${c("lat")}"    cx="72"  cy="162" rx="12" ry="22"/>
-    <ellipse class="${c("lat")}"    cx="108" cy="162" rx="12" ry="22"/>
-    <ellipse class="${c("lumbar")}" cx="90"  cy="200" rx="18" ry="15"/>
-    <ellipse class="${c("glute")}"  cx="80"  cy="242" rx="13" ry="15"/>
-    <ellipse class="${c("glute")}"  cx="100" cy="242" rx="13" ry="15"/>`;
+  // Hervorhebungs-Klassen anhand der data-zone eintragen.
+  const light = (svg) =>
+    svg.replace(/data-zone="([^"]+)"/g, (_, z) => `data-zone="${z}" class="an-m ${on.has(z) ? "on" : "off"}"`);
 
   return `
     <div class="mm-wrap">
-      <svg class="mm-svg" viewBox="0 0 400 470" xmlns="http://www.w3.org/2000/svg" role="img"
-           aria-label="Schematische Figur mit hervorgehobenen, trainierten Muskelgruppen">
-        <g transform="translate(10,10)">${silhouette()}${front}
-          <text class="mm-caption" x="90" y="462" text-anchor="middle">Vorderseite</text>
+      <svg class="mm-svg" viewBox="0 0 440 480" xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-label="Anatomische Muskelfigur; die bei dieser Übung trainierten Muskeln sind hervorgehoben">
+        ${AN_DEFS}
+        <g transform="translate(10,12)">
+          ${light(front)}
+          <text class="mm-caption" x="100" y="466" text-anchor="middle">Vorderseite</text>
         </g>
-        <g transform="translate(210,10)">${silhouette()}${back}
-          <text class="mm-caption" x="90" y="462" text-anchor="middle">Rückseite</text>
+        <g transform="translate(220,12)">
+          ${light(back)}
+          <text class="mm-caption" x="100" y="466" text-anchor="middle">Rückseite</text>
         </g>
       </svg>
-      <p class="mm-legend"><span class="mm-key"></span> orange markiert = bei dieser Übung beanspruchte Muskeln
-        <em>(schematische Darstellung, keine reale Person)</em></p>
+      <p class="mm-legend"><span class="mm-key"></span> hervorgehoben = bei dieser Übung trainierte Muskeln
+        <em>(anatomische Illustration, keine reale Person)</em></p>
     </div>`;
 }
 

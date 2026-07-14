@@ -223,29 +223,27 @@ body {
   width: 1.7rem; height: 1.7rem; display: grid; place-items: center;
   background: var(--teal); color: #fff; border-radius: 9px; font-weight: 700; font-size: .85rem;
 }
-/* ---- Muskel-Landkarte ---- */
+/* ---- Muskel-Landkarte (anatomische Illustration) ---- */
 .mm-wrap {
-  background: linear-gradient(160deg, #ffffff, #f2fbf8);
+  background: radial-gradient(120% 100% at 50% 0%, #fbf7ef 0%, #f3ede1 100%);
   border: 1px solid var(--line); border-radius: 16px;
   padding: 1rem 1rem .8rem; margin-bottom: 1rem;
 }
-.mm-svg { width: 100%; height: auto; max-height: 320px; display: block; }
-.mm-body { fill: #e4e1d7; stroke: #cfcabb; stroke-width: 2; stroke-linejoin: round; }
-.mm-body .mm-limb, .mm-body .mm-leg {
-  fill: none; stroke: #e4e1d7; stroke-linecap: round; stroke-linejoin: round;
+.mm-svg { width: 100%; height: auto; max-height: 380px; display: block; }
+.an-skull { fill: url(#anSkull); stroke: #c9b39c; stroke-width: 1; }
+/* Muskelkörper: alle direkten Pfade einer Muskelgruppe */
+.an-m > path {
+  fill: url(#anRed); stroke: #6f231b; stroke-width: 1; stroke-linejoin: round;
 }
-.mm-body .mm-limb { stroke-width: 18; }
-.mm-body .mm-leg { stroke-width: 22; }
-.mm-zone {
-  fill: rgba(15,118,110,.08); stroke: rgba(15,118,110,.22); stroke-width: 1.4;
-  transition: fill .2s;
-}
-.mm-zone.on {
-  fill: var(--coral); stroke: #c9451f; stroke-width: 1.6;
-  filter: drop-shadow(0 0 5px rgba(242,104,60,.55));
-  animation: mmPulse 1.8s ease-in-out infinite;
-}
-@keyframes mmPulse { 50% { opacity: .78; } }
+.an-m > path.an-fib { fill: none; stroke: #eda488; stroke-width: 1; opacity: .5; }
+.an-m > path.an-ten { fill: #e6d8b6; stroke: #d3c199; stroke-width: .6; }
+/* Sehnen-/Mittellinien (kein Muskel) */
+.an-tenl { fill: none; stroke: #e6d8b6; stroke-width: 2.4; stroke-linecap: round; opacity: .9; }
+/* Hervorhebung / Dämpfung */
+.an-m { transition: opacity .25s ease, filter .25s ease; }
+.an-m.off { opacity: .42; filter: saturate(.3) brightness(1.12); }
+.an-m.on { filter: drop-shadow(0 0 4px rgba(255,160,70,.55)); }
+.an-m.on > path { stroke: #8a2b1e; }
 .mm-caption {
   fill: var(--ink-soft); font-family: "Inter", sans-serif;
   font-size: 15px; font-weight: 600;
@@ -255,11 +253,11 @@ body {
   display: flex; align-items: center; flex-wrap: wrap; gap: .4rem; line-height: 1.4;
 }
 .mm-legend .mm-key {
-  width: .85rem; height: .85rem; border-radius: 4px; background: var(--coral);
-  box-shadow: 0 0 0 1px #c9451f inset; flex: none;
+  width: .85rem; height: .85rem; border-radius: 4px;
+  background: radial-gradient(circle at 35% 30%, #c85f47, #8f2b2b);
+  box-shadow: 0 0 0 1px #6f231b inset, 0 0 4px rgba(255,160,70,.7); flex: none;
 }
 .mm-legend em { color: var(--ink-soft); opacity: .75; font-style: italic; }
-@media (prefers-reduced-motion: reduce) { .mm-zone.on { animation: none; } }
 
 .m-muscles { display: flex; flex-wrap: wrap; gap: .45rem; }
 .m-muscle { background: var(--surface); border: 1px solid var(--line);
