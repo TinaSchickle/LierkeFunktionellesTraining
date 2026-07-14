@@ -223,30 +223,25 @@ body {
   width: 1.7rem; height: 1.7rem; display: grid; place-items: center;
   background: var(--teal); color: #fff; border-radius: 9px; font-weight: 700; font-size: .85rem;
 }
-/* ---- Muskel-Landkarte (anatomische Illustration) ---- */
+/* ---- Muskel-Landkarte (anatomische Körperkarte) ---- */
 .mm-wrap {
   background: radial-gradient(120% 100% at 50% 0%, #fbf7ef 0%, #f3ede1 100%);
   border: 1px solid var(--line); border-radius: 16px;
   padding: 1rem 1rem .8rem; margin-bottom: 1rem;
 }
-.mm-svg { width: 100%; height: auto; max-height: 380px; display: block; }
-.an-skull { fill: url(#anSkull); stroke: #c9b39c; stroke-width: 1; }
-/* Muskelkörper: alle direkten Pfade einer Muskelgruppe */
-.an-m > path {
-  fill: url(#anRed); stroke: #6f231b; stroke-width: 1; stroke-linejoin: round;
+.bm-figs { display: flex; gap: .5rem; justify-content: center; align-items: flex-end; }
+.bm-fig { flex: 1 1 0; margin: 0; text-align: center; max-width: 200px; }
+.bm-svg { width: 100%; height: auto; max-height: 360px; display: block; }
+.bm-fig figcaption {
+  margin-top: .3rem; font-size: .8rem; font-weight: 600; color: var(--ink-soft);
 }
-.an-m > path.an-fib { fill: none; stroke: #eda488; stroke-width: 1; opacity: .5; }
-.an-m > path.an-ten { fill: #e6d8b6; stroke: #d3c199; stroke-width: .6; }
-/* Sehnen-/Mittellinien (kein Muskel) */
-.an-tenl { fill: none; stroke: #e6d8b6; stroke-width: 2.4; stroke-linecap: round; opacity: .9; }
-/* Hervorhebung / Dämpfung */
-.an-m { transition: opacity .25s ease, filter .25s ease; }
-.an-m.off { opacity: .42; filter: saturate(.3) brightness(1.12); }
-.an-m.on { filter: drop-shadow(0 0 4px rgba(255,160,70,.55)); }
-.an-m.on > path { stroke: #8a2b1e; }
-.mm-caption {
-  fill: var(--ink-soft); font-family: "Inter", sans-serif;
-  font-size: 15px; font-weight: 600;
+/* Muskelpolygone: bilden zusammen die Körperfigur */
+.bm-muscle {
+  fill: #d8d0c2; stroke: #b3a894; stroke-width: .35; stroke-linejoin: round;
+  transition: fill .25s ease;
+}
+.bm-muscle.on {
+  fill: url(#bmRed); stroke: #7a1c14; stroke-width: .45;
 }
 .mm-legend {
   margin: .5rem 0 0; font-size: .78rem; color: var(--ink-soft);
