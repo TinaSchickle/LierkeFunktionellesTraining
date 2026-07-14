@@ -13,6 +13,7 @@ const EXERCISES = [
     img: "images/u1.jpg",
     regions: ["Brust", "Rumpf"],
     muscles: ["Pectoralis major et minor", "Rectus abdominis", "Latissimus dorsi", "Deltoideus (pars dorsalis)", "Triceps brachii"],
+    highlight: ["pec", "abs", "delt_f", "lat", "triceps", "delt_b"],
     steps: [
       "Aufrecht hinstellen. Beide Handflächen vor der Brust gegen einen festen Widerstand legen – z. B. den Türrahmen, ein festes Polster oder eine Personenwaage.",
       "Mit maximaler Kraft gerade nach vorne drücken. Rücken lang, Schultern locker.",
@@ -53,6 +54,7 @@ const EXERCISES = [
     photoNote: "Für diese Übung gibt es in der Vorlage kein Foto – deshalb zeigt diese Illustration die Bewegung: Ein Arm drückt diagonal nach vorne, die andere Hand fasst das Handgelenk und zieht mit.",
     regions: ["Brust", "Rumpf"],
     muscles: ["Pectoralis major", "Diagonale Bauchmuskulatur", "Latissimus dorsi"],
+    highlight: ["pec", "oblique", "lat"],
     steps: [
       "Ein Arm drückt diagonal nach vorne unten – in Richtung der gegenüberliegenden Hüfte.",
       "Die andere Hand umgreift das Handgelenk und zieht in dieselbe Richtung. So kommt der Latissimus dieser Seite mit zum Einsatz.",
@@ -67,6 +69,7 @@ const EXERCISES = [
     img: "images/u3.jpg",
     regions: ["Rumpf"],
     muscles: ["Rotatores", "Multifidii", "Transverse Bauchmuskulatur", "Lumbale Rückenstrecker"],
+    highlight: ["abs", "oblique", "lumbar"],
     steps: [
       "Hände vor der Brust zusammenlegen wie zum Gebet.",
       "Die Handflächen mit maximaler Kraft gegeneinander drücken.",
@@ -82,6 +85,7 @@ const EXERCISES = [
     img: "images/u4.jpg",
     regions: ["Rumpf", "Hüfte"],
     muscles: ["Lumbo-sacraler Übergang", "Gluteus maximus", "Ilio-psoas / Adduktoren", "Pelvi-trochantäre Muskulatur"],
+    highlight: ["hipflex", "glute", "lumbar"],
     steps: [
       "Schrittstellung wie beim Sprintstart einnehmen, Arme in Laufhaltung (ein Arm vor, ein Arm zurück).",
       "Diagonale Körperspannung aufbauen – Rumpf, Hüfte und Beine arbeiten zusammen.",
@@ -98,6 +102,7 @@ const EXERCISES = [
     img: "images/u5.jpg",
     regions: ["Schulter", "Rumpf"],
     muscles: ["Intrascapuläre Muskulatur", "Pectoralis major / minor", "Schultergürtelmuskulatur"],
+    highlight: ["pec", "delt_f", "scapula", "traps", "delt_b"],
     steps: [
       "Ausfallschritt in Wurfstellung wie ein Speerwerfer, ein Arm nach hinten oben geführt.",
       "Eine diagonale Rotationsspannung über den ganzen Rumpf aufbauen.",
@@ -113,6 +118,7 @@ const EXERCISES = [
     img: "images/u6.jpg",
     regions: ["Schulter"],
     muscles: ["Schultergürtel", "Rotatorenmanschette (gelenksichernd)"],
+    highlight: ["delt_f", "traps", "delt_b", "scapula"],
     equipment: "Griffiger Gymnastikball, ⌀ 10–12 cm",
     steps: [
       "Den Ball zwischen Handfläche und Türrahmen klemmen. Der Ball wirkt wie eine elastische Anbindung und sorgt für höhere neuromuskuläre Aktivität als ein starrer Widerstand.",
@@ -181,6 +187,73 @@ function render() {
   });
 }
 
+/* ---------- Muskel-Landkarte ----------
+   Schematische, frei gezeichnete Figur (keine reale Person / kein Foto).
+   Die für eine Übung trainierten Muskelgruppen werden farbig hervorgehoben. */
+
+/* Grund-Silhouette (lokale Koordinaten 0..180 breit, 0..470 hoch) –
+   für Vorder- und Rückansicht identisch verwendet. */
+function silhouette() {
+  return `
+    <g class="mm-body">
+      <circle cx="90" cy="42" r="24"/>
+      <rect x="79" y="60" width="22" height="18" rx="8"/>
+      <path d="M62,84 Q90,77 118,84 L124,142 Q126,182 114,214 L110,220 Q90,227 70,220 L66,214 Q54,182 56,142 Z"/>
+      <path class="mm-limb" d="M60,90 L45,150 L49,208"/>
+      <path class="mm-limb" d="M120,90 L135,150 L131,208"/>
+      <path d="M68,214 Q90,222 112,214 L118,252 Q90,264 62,252 Z"/>
+      <path class="mm-leg" d="M80,250 L74,342 L78,432"/>
+      <path class="mm-leg" d="M100,250 L106,342 L102,432"/>
+    </g>`;
+}
+
+function muscleMap(highlight) {
+  const on = new Set(highlight || []);
+  const c = (k) => (on.has(k) ? "mm-zone on" : "mm-zone");
+
+  // Vorderansicht-Zonen
+  const front = `
+    <ellipse class="${c("delt_f")}" cx="60"  cy="98"  rx="13" ry="11"/>
+    <ellipse class="${c("delt_f")}" cx="120" cy="98"  rx="13" ry="11"/>
+    <ellipse class="${c("pec")}"    cx="78"  cy="116" rx="13" ry="10"/>
+    <ellipse class="${c("pec")}"    cx="102" cy="116" rx="13" ry="10"/>
+    <rect    class="${c("abs")}"    x="80" y="128" width="20" height="56" rx="7"/>
+    <ellipse class="${c("oblique")}" cx="70"  cy="168" rx="8"  ry="20"/>
+    <ellipse class="${c("oblique")}" cx="110" cy="168" rx="8"  ry="20"/>
+    <ellipse class="${c("hipflex")}" cx="80"  cy="250" rx="10" ry="17"/>
+    <ellipse class="${c("hipflex")}" cx="100" cy="250" rx="10" ry="17"/>`;
+
+  // Rückansicht-Zonen
+  const back = `
+    <ellipse class="${c("delt_b")}" cx="60"  cy="98"  rx="13" ry="11"/>
+    <ellipse class="${c("delt_b")}" cx="120" cy="98"  rx="13" ry="11"/>
+    <path    class="${c("traps")}"  d="M72,90 Q90,84 108,90 L104,116 Q90,122 76,116 Z"/>
+    <ellipse class="${c("scapula")}" cx="78"  cy="128" rx="9"  ry="11"/>
+    <ellipse class="${c("scapula")}" cx="102" cy="128" rx="9"  ry="11"/>
+    <ellipse class="${c("triceps")}" cx="46"  cy="140" rx="8"  ry="16"/>
+    <ellipse class="${c("triceps")}" cx="134" cy="140" rx="8"  ry="16"/>
+    <ellipse class="${c("lat")}"    cx="72"  cy="162" rx="12" ry="22"/>
+    <ellipse class="${c("lat")}"    cx="108" cy="162" rx="12" ry="22"/>
+    <ellipse class="${c("lumbar")}" cx="90"  cy="200" rx="18" ry="15"/>
+    <ellipse class="${c("glute")}"  cx="80"  cy="242" rx="13" ry="15"/>
+    <ellipse class="${c("glute")}"  cx="100" cy="242" rx="13" ry="15"/>`;
+
+  return `
+    <div class="mm-wrap">
+      <svg class="mm-svg" viewBox="0 0 400 470" xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-label="Schematische Figur mit hervorgehobenen, trainierten Muskelgruppen">
+        <g transform="translate(10,10)">${silhouette()}${front}
+          <text class="mm-caption" x="90" y="462" text-anchor="middle">Vorderseite</text>
+        </g>
+        <g transform="translate(210,10)">${silhouette()}${back}
+          <text class="mm-caption" x="90" y="462" text-anchor="middle">Rückseite</text>
+        </g>
+      </svg>
+      <p class="mm-legend"><span class="mm-key"></span> orange markiert = bei dieser Übung beanspruchte Muskeln
+        <em>(schematische Darstellung, keine reale Person)</em></p>
+    </div>`;
+}
+
 /* ---------- Modal ---------- */
 
 const modal = document.getElementById("modal");
@@ -207,6 +280,7 @@ function openModal(ex) {
 
       <div class="m-block">
         <h4>Wirkungsschwerpunkt</h4>
+        ${ex.highlight ? muscleMap(ex.highlight) : ""}
         <div class="m-muscles">${ex.muscles.map((m) => `<span class="m-muscle">${m}</span>`).join("")}</div>
       </div>
     </div>`;

@@ -223,6 +223,44 @@ body {
   width: 1.7rem; height: 1.7rem; display: grid; place-items: center;
   background: var(--teal); color: #fff; border-radius: 9px; font-weight: 700; font-size: .85rem;
 }
+/* ---- Muskel-Landkarte ---- */
+.mm-wrap {
+  background: linear-gradient(160deg, #ffffff, #f2fbf8);
+  border: 1px solid var(--line); border-radius: 16px;
+  padding: 1rem 1rem .8rem; margin-bottom: 1rem;
+}
+.mm-svg { width: 100%; height: auto; max-height: 320px; display: block; }
+.mm-body { fill: #e4e1d7; stroke: #cfcabb; stroke-width: 2; stroke-linejoin: round; }
+.mm-body .mm-limb, .mm-body .mm-leg {
+  fill: none; stroke: #e4e1d7; stroke-linecap: round; stroke-linejoin: round;
+}
+.mm-body .mm-limb { stroke-width: 18; }
+.mm-body .mm-leg { stroke-width: 22; }
+.mm-zone {
+  fill: rgba(15,118,110,.08); stroke: rgba(15,118,110,.22); stroke-width: 1.4;
+  transition: fill .2s;
+}
+.mm-zone.on {
+  fill: var(--coral); stroke: #c9451f; stroke-width: 1.6;
+  filter: drop-shadow(0 0 5px rgba(242,104,60,.55));
+  animation: mmPulse 1.8s ease-in-out infinite;
+}
+@keyframes mmPulse { 50% { opacity: .78; } }
+.mm-caption {
+  fill: var(--ink-soft); font-family: "Inter", sans-serif;
+  font-size: 15px; font-weight: 600;
+}
+.mm-legend {
+  margin: .5rem 0 0; font-size: .78rem; color: var(--ink-soft);
+  display: flex; align-items: center; flex-wrap: wrap; gap: .4rem; line-height: 1.4;
+}
+.mm-legend .mm-key {
+  width: .85rem; height: .85rem; border-radius: 4px; background: var(--coral);
+  box-shadow: 0 0 0 1px #c9451f inset; flex: none;
+}
+.mm-legend em { color: var(--ink-soft); opacity: .75; font-style: italic; }
+@media (prefers-reduced-motion: reduce) { .mm-zone.on { animation: none; } }
+
 .m-muscles { display: flex; flex-wrap: wrap; gap: .45rem; }
 .m-muscle { background: var(--surface); border: 1px solid var(--line);
   padding: .4rem .8rem; border-radius: 10px; font-size: .88rem; font-weight: 500; }
